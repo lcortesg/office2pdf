@@ -53,9 +53,9 @@ if uploaded_files:
                 excel_to_pdf(input_path, pdf_folder)
             if uploaded_file.name.endswith(".xls"):
                 excel_to_pdf(input_path, pdf_folder)
-            elif uploaded_file.name.endswith(".doc"):
+            if uploaded_file.name.endswith(".doc"):
                 docx_to_pdf(input_path, pdf_folder)
-            elif uploaded_file.name.endswith(".docx"):
+            if uploaded_file.name.endswith(".docx"):
                 docx_to_pdf(input_path, pdf_folder)
 
         # Create a zip file containing all converted PDFs
