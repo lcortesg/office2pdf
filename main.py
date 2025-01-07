@@ -28,7 +28,7 @@ def zip_pdfs(pdf_folder, zip_filename):
 st.title("Convert Files to PDF")
 
 # Upload multiple files
-uploaded_files = st.file_uploader("Upload Excel (.xlsx) and Word (.docx) files", type=["xlsx", "docx", "xls", "doc"], accept_multiple_files=True)
+uploaded_files = st.file_uploader("Upload Excel (.xlsx) and Word (.docx) files", type=["xlsx", "xls", "docx", "doc"], accept_multiple_files=True)
 
 if uploaded_files:
     # Create a temporary folder to store converted PDFs
@@ -51,6 +51,10 @@ if uploaded_files:
 
             if uploaded_file.name.endswith(".xlsx"):
                 excel_to_pdf(input_path, pdf_folder)
+            if uploaded_file.name.endswith(".xls"):
+                excel_to_pdf(input_path, pdf_folder)
+            elif uploaded_file.name.endswith(".doc"):
+                docx_to_pdf(input_path, pdf_folder)
             elif uploaded_file.name.endswith(".docx"):
                 docx_to_pdf(input_path, pdf_folder)
 
