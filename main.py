@@ -7,12 +7,12 @@ from io import BytesIO
 
 # Function to convert Excel files to PDF using LibreOffice
 def excel_to_pdf(input_file, output_folder):
-    command = f'libreoffice --headless --convert-to pdf --outdir "{output_folder}" "{input_file}"'
+    command = f'libreoffice --headless --convert-to pdf --outdir "{output_folder}/excel" "{input_file}"'
     subprocess.run(command, shell=True)
 
 # Function to convert DOCX files to PDF using LibreOffice
 def docx_to_pdf(input_file, output_folder):
-    command = f'libreoffice --headless --convert-to pdf --outdir "{output_folder}" "{input_file}"'
+    command = f'libreoffice --headless --convert-to pdf --outdir "{output_folder}/word" "{input_file}"'
     subprocess.run(command, shell=True)
 
 # Function to create a zip file from the converted PDFs
@@ -28,7 +28,7 @@ def zip_pdfs(pdf_folder, zip_filename):
 st.title("Convert Files to PDF")
 
 # Upload multiple files
-uploaded_files = st.file_uploader("Upload Excel (.xlsx) and Word (.docx) files", type=["xlsx", "xls", "docx", "doc"], accept_multiple_files=True)
+uploaded_files = st.file_uploader("Upload Excel (.xlsx, .xls) and Word (.docx, .doc) files", type=["xlsx", "xls", "docx", "doc"], accept_multiple_files=True)
 
 if uploaded_files:
     # Create a temporary folder to store converted PDFs
@@ -46,16 +46,14 @@ if uploaded_files:
             with open(input_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
 
-            # Convert the file to PDF
-            output_pdf_path = os.path.join(pdf_folder, f"{os.path.splitext(uploaded_file.name)[0]}.pdf")
+            # Get the unique output PDF filename (keep the original filename but with .pdf extension)
+            output_pdf_filename = f"{os.path.splitext(uploaded_file.name)[0]}.pdf"
+            output_pdf_path = os.path.join(pdf_folder, output_pdf_filename)
 
-            if uploaded_file.name.endswith(".xlsx"):
+            # Convert the file based on its extension
+            if uploaded_file.name.endswith(".xlsx") or uploaded_file.name.endswith(".xls"):
                 excel_to_pdf(input_path, pdf_folder)
-            if uploaded_file.name.endswith(".xls"):
-                excel_to_pdf(input_path, pdf_folder)
-            if uploaded_file.name.endswith(".doc"):
-                docx_to_pdf(input_path, pdf_folder)
-            if uploaded_file.name.endswith(".docx"):
+            if uploaded_file.name.endswith(".docx") or uploaded_file.name.endswith(".doc"):
                 docx_to_pdf(input_path, pdf_folder)
 
         # Create a zip file containing all converted PDFs
